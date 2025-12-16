@@ -59,16 +59,16 @@ class OrderControllerIntegrationTest {
     @BeforeEach
     void setUp() {
         List<ProductDTO> products = new ArrayList<>();
-        products.add(ProductDTO.builder()
-                .name("Produto A")
-                .value(new BigDecimal("10.50"))
-                .quantity(2)
-                .build());
+        products.add(new ProductDTO(
+                "Produto A",
+                new BigDecimal("10.50"),
+                2
+        ));
 
-        orderRequest = OrderRequestDTO.builder()
-                .externalId("EXT-123")
-                .products(products)
-                .build();
+        orderRequest = new OrderRequestDTO(
+                "EXT-123",
+                products
+        );
     }
 
     @Test
@@ -86,10 +86,10 @@ class OrderControllerIntegrationTest {
     @Test
     @DisplayName("Deve retornar erro 400 quando dados inválidos")
     void deveRetornarErro400QuandoDadosInvalidos() throws Exception {
-        OrderRequestDTO invalidRequest = OrderRequestDTO.builder()
-                .externalId("")
-                .products(new ArrayList<>())
-                .build();
+        OrderRequestDTO invalidRequest = new OrderRequestDTO(
+                "",
+                new ArrayList<>()
+        );
 
         mockMvc.perform(post("/api/orders")
                         .contentType(MediaType.APPLICATION_JSON)

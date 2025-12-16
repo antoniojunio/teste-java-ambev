@@ -10,7 +10,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.AfterMapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
@@ -26,24 +25,34 @@ public interface OrderMapper {
 
     default Order toEntityWithProducts(OrderRequestDTO dto) {
         Order order = toEntity(dto);
-        if (dto.getProducts() != null) {
-            List<Product> products = dto.getProducts().stream()
+        if (dto.products() != null) {
+            List<Product> products = dto.products().stream()
                     .map(this::toProductEntity)
-                    .collect(Collectors.toList());
+                    .toList(); 
             products.forEach(product -> product.setOrder(order));
             order.setProducts(products);
         }
         return order;
     }
 
-    @Mapping(target = "products", ignore = true)
-    OrderResponseDTO toDTO(Order entity);
-
-    @AfterMapping
-    default void mapProducts(Order entity, @org.mapstruct.MappingTarget OrderResponseDTO dto) {
-        if (entity.getProducts() != null) {
-            dto.setProducts(toProductDTOList(entity.getProducts()));
+    default OrderResponseDTO toDTO(Order entity) {
+        if (entity == null) {
+            return null;
         }
+        
+        List<ProductDTO> products = entity.getProducts() != null 
+            ? toProductDTOList(entity.getProducts()) 
+            : List.of();
+        
+        return new OrderResponseDTO(
+            entity.getId(),
+            entity.getExternalId(),
+            entity.getTotalValue(),
+            entity.getStatus(),
+            entity.getCreatedAt(),
+            entity.getProcessedAt(),
+            products
+        );
     }
 
     List<OrderResponseDTO> toDTOList(List<Order> entities);

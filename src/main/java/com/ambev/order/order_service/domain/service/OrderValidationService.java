@@ -28,9 +28,11 @@ public class OrderValidationService {
         }
 
         if (!errors.isEmpty()) {
-            throw new IllegalArgumentException("Erros de validação: " + String.join(", ", errors));
+            String errorMessage = String.join(", ", errors);
+            throw new IllegalArgumentException("Erros de validação: %s".formatted(errorMessage)); // Java 21: String.formatted()
         }
     }
+
 
     private void validateProducts(List<Product> products, List<String> errors) {
         for (int i = 0; i < products.size(); i++) {
@@ -38,20 +40,20 @@ public class OrderValidationService {
             int index = i + 1;
 
             if (product == null) {
-                errors.add(String.format("Produto %d não pode ser nulo", index));
+                errors.add("Produto %d não pode ser nulo".formatted(index)); // Java 21: String.formatted()
                 continue;
             }
 
             if (product.getName() == null || product.getName().trim().isEmpty()) {
-                errors.add(String.format("Nome do produto %d é obrigatório", index));
+                errors.add("Nome do produto %d é obrigatório".formatted(index));
             }
 
             if (product.getValue() == null || product.getValue().signum() <= 0) {
-                errors.add(String.format("Valor do produto %d deve ser positivo", index));
+                errors.add("Valor do produto %d deve ser positivo".formatted(index));
             }
 
             if (product.getQuantity() == null || product.getQuantity() <= 0) {
-                errors.add(String.format("Quantidade do produto %d deve ser maior que zero", index));
+                errors.add("Quantidade do produto %d deve ser maior que zero".formatted(index));
             }
         }
     }

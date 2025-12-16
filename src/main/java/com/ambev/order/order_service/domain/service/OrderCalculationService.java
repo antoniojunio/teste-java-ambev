@@ -21,6 +21,7 @@ public class OrderCalculationService {
                 .setScale(2, RoundingMode.HALF_UP);
     }
 
+
     private BigDecimal calculateProductTotal(Product product) {
         if (product == null || product.getValue() == null || product.getQuantity() == null) {
             return BigDecimal.ZERO;

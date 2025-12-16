@@ -35,9 +35,9 @@ class OrderMapperTest {
         Order order = orderMapper.toEntityWithProducts(dto);
 
         assertNotNull(order);
-        assertEquals(dto.getExternalId(), order.getExternalId());
+        assertEquals(dto.externalId(), order.getExternalId()); // Records: acesso direto
         assertNotNull(order.getProducts());
-        assertEquals(dto.getProducts().size(), order.getProducts().size());
+        assertEquals(dto.products().size(), order.getProducts().size()); // Records: acesso direto
     }
 
     @Test
@@ -47,24 +47,24 @@ class OrderMapperTest {
         OrderResponseDTO dto = orderMapper.toDTO(order);
 
         assertNotNull(dto);
-        assertEquals(order.getId(), dto.getId());
-        assertEquals(order.getExternalId(), dto.getExternalId());
-        assertEquals(order.getTotalValue(), dto.getTotalValue());
-        assertEquals(order.getStatus(), dto.getStatus());
+        assertEquals(order.getId(), dto.id()); // Records: acesso direto
+        assertEquals(order.getExternalId(), dto.externalId()); // Records: acesso direto
+        assertEquals(order.getTotalValue(), dto.totalValue()); // Records: acesso direto
+        assertEquals(order.getStatus(), dto.status()); // Records: acesso direto
     }
 
     private OrderRequestDTO createOrderRequestDTO() {
         List<ProductDTO> products = new ArrayList<>();
-        products.add(ProductDTO.builder()
-                .name("Produto A")
-                .value(new BigDecimal("10.50"))
-                .quantity(2)
-                .build());
+        products.add(new ProductDTO(
+                "Produto A",
+                new BigDecimal("10.50"),
+                2
+        ));
 
-        return OrderRequestDTO.builder()
-                .externalId("EXT-123")
-                .products(products)
-                .build();
+        return new OrderRequestDTO(
+                "EXT-123",
+                products
+        );
     }
 
     private Order createOrder() {

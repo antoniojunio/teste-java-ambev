@@ -41,7 +41,7 @@ public class OrderController {
             @ApiResponse(responseCode = "409", description = "Pedido duplicado")
     })
     public ResponseEntity<OrderResponseDTO> createOrder(@Valid @RequestBody OrderRequestDTO request) {
-        log.info("Recebendo pedido do Produto Externo A: {}", request.getExternalId());
+        log.info("Recebendo pedido do Produto Externo A: {}", request.externalId()); 
         OrderResponseDTO response = applicationService.processOrder(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

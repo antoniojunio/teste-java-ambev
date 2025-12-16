@@ -84,7 +84,7 @@ class OrderApplicationServiceTest {
         OrderResponseDTO result = applicationService.processOrder(requestDTO);
 
         assertNotNull(result);
-        assertEquals(responseDTO.getId(), result.getId());
+        assertEquals(responseDTO.id(), result.id()); // Records: acesso direto
         verify(lockService).tryLock(anyString());
         verify(duplicateService).isDuplicate(anyString());
         verify(orderRepository).save(any(Order.class));
@@ -114,16 +114,16 @@ class OrderApplicationServiceTest {
 
     private OrderRequestDTO createOrderRequestDTO() {
         List<ProductDTO> products = new ArrayList<>();
-        products.add(ProductDTO.builder()
-                .name("Produto A")
-                .value(new BigDecimal("10.50"))
-                .quantity(2)
-                .build());
+        products.add(new ProductDTO(
+                "Produto A",
+                new BigDecimal("10.50"),
+                2
+        ));
 
-        return OrderRequestDTO.builder()
-                .externalId("EXT-123")
-                .products(products)
-                .build();
+        return new OrderRequestDTO(
+                "EXT-123",
+                products
+        );
     }
 
     private Order createOrder() {
@@ -144,12 +144,15 @@ class OrderApplicationServiceTest {
     }
 
     private OrderResponseDTO createOrderResponseDTO() {
-        return OrderResponseDTO.builder()
-                .id(1L)
-                .externalId("EXT-123")
-                .totalValue(new BigDecimal("21.00"))
-                .status(OrderStatus.PROCESSED)
-                .build();
+        return new OrderResponseDTO(
+                1L,
+                "EXT-123",
+                new BigDecimal("21.00"),
+                OrderStatus.PROCESSED,
+                null,
+                null,
+                List.of()
+        );
     }
 }
 

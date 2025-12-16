@@ -25,7 +25,7 @@ public class OrderQueryService {
     private final OrderMapper orderMapper;
 
     public OrderResponseDTO findById(Long id) {
-        Order order = orderRepository.findById(id)
+        Order order = orderRepository.findByIdWithProducts(id)
                 .orElseThrow(() -> new OrderNotFoundException("Pedido não encontrado com ID: " + id));
         return orderMapper.toDTO(order);
     }

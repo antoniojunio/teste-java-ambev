@@ -33,7 +33,7 @@ public class OrderApplicationService {
 
     @Transactional
     public OrderResponseDTO processOrder(OrderRequestDTO request) {
-        String externalId = request.getExternalId();
+        String externalId = request.externalId(); 
         
         if (!lockService.tryLock(externalId)) {
             throw new DuplicateOrderException("Pedido já está sendo processado: " + externalId);
@@ -57,6 +57,8 @@ public class OrderApplicationService {
             eventPublisher.publishOrderProcessed(response);
 
             log.info("Pedido processado com sucesso: {}", saved.getId());
+            log.debug("Pedido processado - ID: {}, ExternalId: {}, Total: {}", 
+                     saved.getId(), saved.getExternalId(), saved.getTotalValue());
             return response;
 
         } finally {
