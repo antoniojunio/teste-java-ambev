@@ -8,8 +8,10 @@ import com.ambev.order.order_service.domain.model.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.AfterMapping;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
@@ -23,7 +25,27 @@ public interface OrderMapper {
     @Mapping(target = "products", ignore = true)
     Order toEntity(OrderRequestDTO dto);
 
+    default Order toEntityWithProducts(OrderRequestDTO dto) {
+        Order order = toEntity(dto);
+        if (dto.getProducts() != null) {
+            List<Product> products = dto.getProducts().stream()
+                    .map(this::toProductEntity)
+                    .collect(Collectors.toList());
+            products.forEach(product -> product.setOrder(order));
+            order.setProducts(products);
+        }
+        return order;
+    }
+
     OrderResponseDTO toDTO(Order entity);
+
+    default OrderResponseDTO toDTOWithProducts(Order entity) {
+        OrderResponseDTO dto = toDTO(entity);
+        if (entity.getProducts() != null) {
+            dto.setProducts(toProductDTOList(entity.getProducts()));
+        }
+        return dto;
+    }
 
     List<OrderResponseDTO> toDTOList(List<Order> entities);
 

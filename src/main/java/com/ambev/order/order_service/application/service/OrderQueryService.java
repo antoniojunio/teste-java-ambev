@@ -27,17 +27,17 @@ public class OrderQueryService {
     public OrderResponseDTO findById(Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Pedido não encontrado com ID: " + id));
-        return orderMapper.toDTO(order);
+        return orderMapper.toDTOWithProducts(order);
     }
 
     public Page<OrderResponseDTO> findAll(Pageable pageable) {
         Page<Order> orders = (Page<Order>) orderRepository.findAll(pageable);
-        return orders.map(orderMapper::toDTO);
+        return orders.map(orderMapper::toDTOWithProducts);
     }
 
     public Page<OrderResponseDTO> findByStatus(OrderStatus status, Pageable pageable) {
         Page<Order> orders = orderRepository.findByStatus(status, pageable);
-        return orders.map(orderMapper::toDTO);
+        return orders.map(orderMapper::toDTOWithProducts);
     }
 }
 

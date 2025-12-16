@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +26,6 @@ import java.util.stream.Collectors;
 public class OrderApplicationService {
 
     private final IOrderRepository orderRepository;
-    private final IProductRepository productRepository;
     private final OrderMapper orderMapper;
     private final OrderCalculationService calculationService;
     private final OrderValidationService validationService;
@@ -48,17 +46,16 @@ public class OrderApplicationService {
                 throw new DuplicateOrderException("Pedido duplicado: " + externalId);
             }
 
-            Order order = orderMapper.toEntity(request);
+            Order order = orderMapper.toEntityWithProducts(request);
             validationService.validate(order);
 
-            order.getProducts().forEach(product -> product.setOrder(order));
             order.setTotalValue(calculationService.calculateTotal(order));
             order.setStatus(OrderStatus.PROCESSED);
 
             Order saved = orderRepository.save(order);
             duplicateService.markAsProcessed(externalId);
 
-            OrderResponseDTO response = orderMapper.toDTO(saved);
+            OrderResponseDTO response = orderMapper.toDTOWithProducts(saved);
             eventPublisher.publishOrderProcessed(response);
 
             log.info("Pedido processado com sucesso: {}", saved.getId());
