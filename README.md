@@ -205,23 +205,24 @@ mvn clean compile
 ### Executar testes
 
 ```bash
-# Executar apenas testes unitários (não requer Docker)
-mvn test
+# Executar apenas testes unitários (não requer Docker) - RECOMENDADO
+mvn clean install
 
 # Executar todos os testes incluindo integração (requer Docker rodando)
-mvn verify
+mvn clean install -DskipITs=false
 
-# Pular testes de integração mesmo com Docker disponível
-mvn verify -DskipITs=true
+# Executar apenas testes unitários explicitamente
+mvn test
 
 # Executar apenas testes de integração (requer Docker rodando)
-mvn verify -DskipTests=true
+mvn verify -DskipTests=true -DskipITs=false
 ```
 
 **Nota**: 
-- Os testes unitários (`mvn test`) não requerem Docker e podem ser executados em qualquer ambiente.
-- Os testes de integração que usam Testcontainers requerem Docker rodando. Eles são executados apenas com `mvn verify`.
-- Se o Docker não estiver disponível, use `mvn verify -DskipITs=true` para pular os testes de integração.
+- Por padrão, os testes de integração são **pulados automaticamente** (`skipITs=true`) para permitir builds sem Docker.
+- Os testes unitários (`mvn test` ou `mvn clean install`) não requerem Docker e podem ser executados em qualquer ambiente.
+- Os testes de integração que usam Testcontainers requerem Docker rodando. Para executá-los, use `-DskipITs=false`.
+- Para executar todos os testes incluindo integração: `mvn clean install -DskipITs=false` (requer Docker).
 
 ### Gerar JAR
 
