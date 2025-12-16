@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -19,7 +20,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@ActiveProfiles("test")
 @DisplayName("OrderMapper Tests")
 class OrderMapperTest {
 
@@ -30,10 +32,11 @@ class OrderMapperTest {
     @DisplayName("Deve mapear OrderRequestDTO para Order")
     void deveMapearOrderRequestDTOParaOrder() {
         OrderRequestDTO dto = createOrderRequestDTO();
-        Order order = orderMapper.toEntity(dto);
+        Order order = orderMapper.toEntityWithProducts(dto);
 
         assertNotNull(order);
         assertEquals(dto.getExternalId(), order.getExternalId());
+        assertNotNull(order.getProducts());
         assertEquals(dto.getProducts().size(), order.getProducts().size());
     }
 

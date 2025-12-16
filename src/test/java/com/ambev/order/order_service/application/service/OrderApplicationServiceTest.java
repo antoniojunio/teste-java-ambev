@@ -76,7 +76,7 @@ class OrderApplicationServiceTest {
         when(lockService.tryLock(anyString())).thenReturn(true);
         when(duplicateService.isDuplicate(anyString())).thenReturn(false);
         when(orderRepository.existsByExternalId(anyString())).thenReturn(false);
-        when(orderMapper.toEntity(any(OrderRequestDTO.class))).thenReturn(order);
+        when(orderMapper.toEntityWithProducts(any(OrderRequestDTO.class))).thenReturn(order);
         when(calculationService.calculateTotal(any(Order.class))).thenReturn(new BigDecimal("21.00"));
         when(orderRepository.save(any(Order.class))).thenReturn(order);
         when(orderMapper.toDTO(any(Order.class))).thenReturn(responseDTO);
@@ -98,7 +98,8 @@ class OrderApplicationServiceTest {
         when(lockService.tryLock(anyString())).thenReturn(false);
 
         assertThrows(DuplicateOrderException.class, () -> applicationService.processOrder(requestDTO));
-        verify(lockService).releaseLock(anyString());
+        // Quando o lock não é adquirido, a exceção é lançada antes do try, então o releaseLock não é chamado
+        verify(lockService, never()).releaseLock(anyString());
     }
 
     @Test

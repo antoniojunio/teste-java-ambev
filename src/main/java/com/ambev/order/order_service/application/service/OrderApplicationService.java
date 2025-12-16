@@ -5,7 +5,6 @@ import com.ambev.order.order_service.application.dto.OrderResponseDTO;
 import com.ambev.order.order_service.application.mapper.OrderMapper;
 import com.ambev.order.order_service.domain.model.Order;
 import com.ambev.order.order_service.domain.model.OrderStatus;
-import com.ambev.order.order_service.domain.model.Product;
 import com.ambev.order.order_service.infrastructure.persistence.OrderRepository;
 import com.ambev.order.order_service.domain.service.OrderCalculationService;
 import com.ambev.order.order_service.domain.service.OrderValidationService;
