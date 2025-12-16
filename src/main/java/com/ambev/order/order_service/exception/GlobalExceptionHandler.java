@@ -71,7 +71,14 @@ public class GlobalExceptionHandler {
         log.error("Erro interno: {}", ex.getMessage(), ex);
         Map<String, String> error = new HashMap<>();
         error.put("error", "Erro interno do servidor");
-        error.put("message", "Ocorreu um erro inesperado");
+        // Em desenvolvimento, mostrar a mensagem real do erro
+        String message = ex.getMessage();
+        if (message != null && !message.isEmpty()) {
+            error.put("message", message);
+            error.put("type", ex.getClass().getSimpleName());
+        } else {
+            error.put("message", "Ocorreu um erro inesperado");
+        }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }
