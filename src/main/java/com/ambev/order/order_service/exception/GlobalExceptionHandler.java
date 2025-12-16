@@ -71,7 +71,6 @@ public class GlobalExceptionHandler {
         log.error("Erro interno: {}", ex.getMessage(), ex);
         Map<String, String> error = new HashMap<>();
         error.put("error", "Erro interno do servidor");
-        // Em desenvolvimento, mostrar a mensagem real do erro
         String message = ex.getMessage();
         if (message != null && !message.isEmpty()) {
             error.put("message", message);
