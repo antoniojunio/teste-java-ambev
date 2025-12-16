@@ -7,7 +7,6 @@ import com.ambev.order.order_service.domain.model.Order;
 import com.ambev.order.order_service.domain.model.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.AfterMapping;
 
 import java.util.List;
@@ -37,14 +36,14 @@ public interface OrderMapper {
         return order;
     }
 
+    @Mapping(target = "products", ignore = true)
     OrderResponseDTO toDTO(Order entity);
 
-    default OrderResponseDTO toDTOWithProducts(Order entity) {
-        OrderResponseDTO dto = toDTO(entity);
+    @AfterMapping
+    default void mapProducts(Order entity, @org.mapstruct.MappingTarget OrderResponseDTO dto) {
         if (entity.getProducts() != null) {
             dto.setProducts(toProductDTOList(entity.getProducts()));
         }
-        return dto;
     }
 
     List<OrderResponseDTO> toDTOList(List<Order> entities);

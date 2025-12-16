@@ -55,7 +55,7 @@ public class OrderApplicationService {
             Order saved = orderRepository.save(order);
             duplicateService.markAsProcessed(externalId);
 
-            OrderResponseDTO response = orderMapper.toDTOWithProducts(saved);
+            OrderResponseDTO response = orderMapper.toDTO(saved);
             eventPublisher.publishOrderProcessed(response);
 
             log.info("Pedido processado com sucesso: {}", saved.getId());
