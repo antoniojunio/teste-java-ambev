@@ -1,0 +1,10 @@
+CREATE TABLE orders (
+    id BIGSERIAL PRIMARY KEY,
+    external_id VARCHAR(100) NOT NULL,
+    total_value NUMERIC(19, 2) NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    processed_at TIMESTAMP,
+    version BIGINT NOT NULL DEFAULT 0
+);
+
