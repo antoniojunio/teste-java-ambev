@@ -31,6 +31,7 @@
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
 		<resilience4j.version>2.1.0</resilience4j.version>
 		<testcontainers.version>1.19.8</testcontainers.version>
+		<skipITs>false</skipITs>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -166,6 +167,29 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/*IntegrationTest.java</exclude>
+						<exclude>**/OrderRepositoryTest.java</exclude>
+						<exclude>**/RedisDuplicateServiceTest.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<configuration>
+					<includes>
+						<include>**/*IntegrationTest.java</include>
+						<include>**/OrderRepositoryTest.java</include>
+						<include>**/RedisDuplicateServiceTest.java</include>
+					</includes>
+					<skipITs>${skipITs}</skipITs>
 				</configuration>
 			</plugin>
 		</plugins>

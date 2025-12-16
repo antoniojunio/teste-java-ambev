@@ -35,7 +35,7 @@ public class Product {
     @NotBlank(message = "Nome do produto é obrigatório")
     private String name;
 
-    @Column(name = "value", nullable = false, precision = 19, scale = 2)
+    @Column(name = "product_value", nullable = false, precision = 19, scale = 2)
     @NotNull(message = "Valor do produto é obrigatório")
     @Positive(message = "Valor do produto deve ser positivo")
     private BigDecimal value;
