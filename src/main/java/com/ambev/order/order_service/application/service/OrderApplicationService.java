@@ -6,8 +6,7 @@ import com.ambev.order.order_service.application.mapper.OrderMapper;
 import com.ambev.order.order_service.domain.model.Order;
 import com.ambev.order.order_service.domain.model.OrderStatus;
 import com.ambev.order.order_service.domain.model.Product;
-import com.ambev.order.order_service.domain.repository.IOrderRepository;
-import com.ambev.order.order_service.domain.repository.IProductRepository;
+import com.ambev.order.order_service.infrastructure.persistence.OrderRepository;
 import com.ambev.order.order_service.domain.service.OrderCalculationService;
 import com.ambev.order.order_service.domain.service.OrderValidationService;
 import com.ambev.order.order_service.exception.DuplicateOrderException;
@@ -25,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class OrderApplicationService {
 
-    private final IOrderRepository orderRepository;
+    private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final OrderCalculationService calculationService;
     private final OrderValidationService validationService;

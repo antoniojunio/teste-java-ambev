@@ -9,17 +9,9 @@ import java.util.Optional;
 
 public interface IOrderRepository {
     
-    Order save(Order order);
-    
-    Optional<Order> findById(Long id);
-    
     Optional<Order> findByExternalId(String externalId);
     
     boolean existsByExternalId(String externalId);
-    
-    void deleteById(Long id);
-    
-    Page<Order> findAll(Pageable pageable);
     
     Page<Order> findByStatus(OrderStatus status, Pageable pageable);
 }

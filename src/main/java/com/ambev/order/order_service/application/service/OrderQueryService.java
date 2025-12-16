@@ -4,7 +4,7 @@ import com.ambev.order.order_service.application.dto.OrderResponseDTO;
 import com.ambev.order.order_service.domain.model.Order;
 import com.ambev.order.order_service.domain.model.OrderStatus;
 import com.ambev.order.order_service.application.mapper.OrderMapper;
-import com.ambev.order.order_service.domain.repository.IOrderRepository;
+import com.ambev.order.order_service.infrastructure.persistence.OrderRepository;
 import com.ambev.order.order_service.exception.OrderNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class OrderQueryService {
 
-    private final IOrderRepository orderRepository;
+    private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
 
     public OrderResponseDTO findById(Long id) {
@@ -31,7 +31,7 @@ public class OrderQueryService {
     }
 
     public Page<OrderResponseDTO> findAll(Pageable pageable) {
-        Page<Order> orders = (Page<Order>) orderRepository.findAll(pageable);
+        Page<Order> orders = orderRepository.findAll(pageable);
         return orders.map(orderMapper::toDTO);
     }
 
